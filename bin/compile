@@ -95,7 +95,7 @@ echo "Copied index.html into htdocs..."
 
 # edit the http config to listen > 1024 port since we are not an root user
 #sed -i "s/Listen 80/ Listen <%= ENV[\"PORT\"] %>/g" $apache2_build_dir/conf/httpd.conf
-sed -i "s/Listen 80/ Listen 61451 %>/g" $apache2_build_dir/conf/httpd.conf
+sed -i "s/Listen 80/ Listen 61451/g" $apache2_build_dir/conf/httpd.conf
 
 #echo "changed apache http conf listen port from 80 to 9080"
 
