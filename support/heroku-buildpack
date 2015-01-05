@@ -157,25 +157,25 @@ function buildpack_setup()
   cp -R $buildpack_root/conf $nginx
   cp -R $buildpack_root/logs $nginx
   tar czvf $nginx.tar.gz $nginx --transform s/^$nginx/nginx/ --owner=0 --group=0 && rm -rf $nginx
-}
-
-function buildpack_setup()
-{
+  
+  
+  <<'COMMENT'
   apache2=$(basename ${buildpack_apache2_download%.tar.gz})
   mkdir -p $buildpack_root/builds
   cd $buildpack_root/builds
 
-  [[ -f $apache2.tar.gz ]] || buildpack_exit "No" && mkdir -p $nginx
+  [[ -f $apache2.tar.gz ]] || buildpack_exit "No" && mkdir -p $apache2
 
-  tar xmzvf $nginx.tar.gz -C $nginx
-  chmod -R uog+rx $nginx/sbin
-  rm -rf $nginx/html
-  rm -rf $nginx/conf
-  rm -rf $nginx/logs
-  cp -R $buildpack_root/conf $nginx
-  cp -R $buildpack_root/logs $nginx
-  tar czvf $nginx.tar.gz $nginx --transform s/^$nginx/nginx/ --owner=0 --group=0 && rm -rf $nginx
-}
+  tar xmzvf $apache2.tar.gz -C $apache2
+  chmod -R uog+rx $apache2/bin
+  rm -rf $apache2/conf
+  rm -rf $apache2/logs
+  cp -R $buildpack_root/conf $apache2
+  cp -R $buildpack_root/logs $apache2
+  tar czvf $apache2.tar.gz $apache2 --transform s/^$apache2/nginx/ --owner=0 --group=0 && rm -rf $apache2
+COMMENT
+  }
+
 
 # ------------------------------------------------------------------------------------------------
 # $~: heroku-buildpack cleanup
