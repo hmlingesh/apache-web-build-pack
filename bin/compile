@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+shopt -s dotglob
+set -e
+
+# ------------------------------------------------------------------------------------------------
+
+compile_build_dir=$1
+compile_cache_dir=$2
+compile_buildpack_dir=$(cd $(dirname $0) && cd .. && pwd)
+compile_buildpack_bin=$compile_buildpack_dir/bin
+
+echo "Apache running.... "$(netstat -a | grep 8080)
+echo "pwd: $(pwd)"
+echo "compile_build_dir: $compile_build_dir"
+echo "compile_cache_dir: $compile_cache_dir"
+echo "compile_buildpack_bin: $compile_buildpack_bin"
+echo "compile_buildpack_dir: $compile_buildpack_dir"
+
+# ------------------------------------------------------------------------------------------------
+
+compile_nginx_tgz="$compile_buildpack_dir/vendor/nginx-1.5.10.tar.gz"
+compile_httpd_tgz="$compile_buildpack_dir/vendor/httpd-2.2.29.tar.gz"
+# ------------------------------------------------------------------------------------------------
+
+cd $compile_build_dir
+
+# ------------------------------------------------------------------------------------------------
+
+echo "-----> Doing work with $(basename ${compile_nginx_tgz%.tar.gz}) son."
+mkdir -p $compile_cache_dir/public
+mv * $compile_cache_dir/public
+mv $compile_cache_dir/public .
+[[ -f public/Procfile ]] && mv public/Procfile .
+tar xzf $compile_nginx_tgz
+tar xzf $compile_httpd_tgz
+
+echo "----> list of files and directory:$(ls -l)" 
+
+cp -f $compile_buildpack_dir/conf/nginx.conf nginx/conf/nginx.conf
+cp -f $compile_buildpack_dir/conf/mime.types nginx/conf/mime.types
+
+
+
+[[ -f public/nginx.conf ]] && mv public/nginx.conf nginx/conf/nginx.conf
+[[ -f public/mime.types ]] && mv public/mime.types nginx/conf/mime.types
+
+echo "-----> Ensuring manifest.yml & stackato.yml aren't available in public/"
+rm -f public/{manifest,stackato}.yml
+
+# ------------------------------------------------------------------------------------------------
+
+cp $compile_buildpack_bin/boot.sh .
+#ls -lah
+if [ ! -d "$HOME/apache2" ]; then
+
+cd $compile_build_dir/httpd-2.2.29
+
+apache2_build_dir=$compile_build_dir/apache2
+#configure
+./configure --prefix=$apache2_build_dir \
+--enable-mods-shared=all \
+--enable-http \
+--enable-deflate \
+--enable-expires \
+--enable-slotmem-shm \
+--enable-headers \
+--enable-rewrite \
+--enable-proxy \
+--enable-proxy-balancer \
+--enable-proxy-http \
+--enable-proxy-fcgi \
+--enable-mime-magic \
+--enable-log-debug \
+--with-mpm=event
+echo "config completed to:"$apache2_build_dir
+
+#compile the source
+make
+echo "apache has been compiled successfully..."
+
+#install
+make install
+echo "apache has been installed successfully..."
+
+fi
+
+#echo "----> list of files and directory:$(ls -l)" 
+#echo "----> list of files and directory:"$HOME
+#cd $HOME
+#echo "----> list of files and directory:$(ls -l)"
+cp $compile_build_dir/public/index.html $apache2_build_dir/htdocs
+echo "Copied index.html into htdocs..."
+
+# edit the http config to listen > 1024 port since we are not an root user
+#sed -i "s/Listen 80/ Listen <%= ENV[\"PORT\"] %>/g" $apache2_build_dir/conf/httpd.conf
+sed -i "s/Listen 80/ Listen 61451 %>/g" $apache2_build_dir/conf/httpd.conf
+
+#echo "changed apache http conf listen port from 80 to 9080"
+
+#start the apache
+$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
+echo "Apache has been started...."
+echo "Apache has been started.... "$(netstat -a | grep 61451)
+#echo "VCAP_PORT:"$(VCAP_APP_PORT)
+
+export APP_ROOT=$HOME
+
+echo "APP_ROOT:"$APP_ROOT
+cd $(APP_ROOT)
+echo "----> list of files and directory:$(ls -l)"
+# ------------------------------------------------------------------------------------------------
+
+
