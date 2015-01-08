@@ -21,8 +21,8 @@ for i in $(ls -d  $HOME/*/); do echo ${i%%/}; done
 cat $APP_ROOT/apache2/conf/httpd.conf
 
 #ldconfig
-
-(tail -f -n 0 $APP_ROOT/apache2/logs/*.log &)
+grep -i "Listen" $APP_ROOT/apache2/conf/httpd.conf
+#(tail -f -n 0 $APP_ROOT/apache2/logs/*.log &)
 exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
 #exec $APP_ROOT/apache2/bin/apachectl start
 # ------------------------------------------------------------------------------------------------
