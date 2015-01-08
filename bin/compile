@@ -79,8 +79,8 @@ echo "config completed to:"$apache2_build_dir
 make
 echo "apache has been compiled successfully..."
 
-install
-#make install
+#install
+make install
 echo "apache has been installed successfully..."
 
 fi
