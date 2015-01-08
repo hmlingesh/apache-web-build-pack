@@ -76,6 +76,8 @@ cp -f $compile_buildpack_dir/conf/mime.types nginx/conf/mime.types
 [[ -f public/mime.types ]] && mv public/mime.types nginx/conf/mime.types
 
 
+cp -f $compile_buildpack_dir/conf/httpd.conf apache2/conf/httpd.conf
+[[ -f public/httpd.conf ]] && mv public/httpd.conf apache2/conf/httpd.conf
 echo "-----> Ensuring manifest.yml & stackato.yml aren't available in public/"
 rm -f public/{manifest,stackato}.yml
 
