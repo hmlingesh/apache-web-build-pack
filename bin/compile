@@ -105,15 +105,10 @@ echo "Copied index.html into htdocs..."
 
 #start the apache
 $apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
-#echo "Apache has been started...."
-#echo "Apache has been started.... "$(netstat -a | grep 61451)
+echo "Apache has been started...."
+echo "Apache has been started.... "$(netstat -a)
 #echo "VCAP_PORT:"$(VCAP_APP_PORT)
 
-export APP_ROOT=$HOME
-
-echo "APP_ROOT:"$(APP_ROOT)
-cd $(APP_ROOT)
-echo "----> list of files and directory:$(ls -l)"
 # ------------------------------------------------------------------------------------------------
 
 
