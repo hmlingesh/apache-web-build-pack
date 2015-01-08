@@ -5,7 +5,12 @@ shopt -s dotglob
 set -e
 
 # ------------------------------------------------------------------------------------------------
-
+#        compile_build_dir: /tmp/staged/app
+#        compile_cache_dir: /tmp/cache
+#        compile_buildpack_bin: /tmp/buildpacks/{project-name}/bin
+#        compile_buildpack_dir: /tmp/buildpacks/{project-name}
+#        pwd: /tmp/staged
+#------------------------------------------------------------------------------------------------------
 compile_build_dir=$1
 compile_cache_dir=$2
 compile_buildpack_dir=$(cd $(dirname $0) && cd .. && pwd)
@@ -17,14 +22,13 @@ echo "compile_cache_dir: $compile_cache_dir"
 echo "compile_buildpack_bin: $compile_buildpack_bin"
 echo "compile_buildpack_dir: $compile_buildpack_dir"
 
-# ------------------------------------------------------------------------------------------------
+# ----------------------httpd download kept along with buildpack--------------------------------------------------------------------------
 compile_httpd_tgz="$compile_buildpack_dir/vendor/httpd-2.2.29.tar.gz"
 # ------------------------------------------------------------------------------------------------
 
 cd $compile_build_dir
 
-# ------------------------------------------------------------------------------------------------
-
+# -----------------------------------creating public directory under cache directory-------------------------------------------------------------
 
 mkdir -p $compile_cache_dir/public
 mv * $compile_cache_dir/public
@@ -32,6 +36,7 @@ mv $compile_cache_dir/public .
 [[ -f public/Procfile ]] && mv public/Procfile .
 tar xzf $compile_httpd_tgz
 
+# -----------------------------------httpd configure,compile and install-------------------------------------------------------------
 cd $compile_build_dir/httpd-2.2.29
 
 apache2_build_dir=$compile_build_dir/apache2
@@ -67,38 +72,23 @@ cd ..
 
 echo "----> list of files and directory:$(ls -l)" 
 
+#copying config file from buildpack to apache2 directory also to public directory
 cp -f $compile_buildpack_dir/conf/httpd.conf apache2/conf/httpd.conf
 [[ -f public/httpd.conf ]] && mv public/httpd.conf apache2/conf/httpd.conf
-echo "-----> Ensuring manifest.yml & stackato.yml aren't available in public/"
-rm -f public/{manifest,stackato}.yml
 
 # ------------------------------------------------------------------------------------------------
 
 cp $compile_buildpack_bin/boot.sh .
  
+# -------------------------------testing purpose copying project index.html to apache2-----------------------------------------------------------------
 
-
-
-
-
-#echo "----> list of files and directory:$(ls -l)" 
-#echo "----> list of files and directory:"$HOME
-#cd $HOME
-#echo "----> list of files and directory:$(ls -l)"
 cp $compile_build_dir/public/index.html $apache2_build_dir/htdocs
 echo "Copied index.html into htdocs..."
 
-# edit the http config to listen > 1024 port since we are not an root user
-#sed -i "s/Listen 80/ Listen <%= ENV[\"PORT\"] %>/g" $apache2_build_dir/conf/httpd.conf
-#sed -i "s/Listen 80/ Listen 61451/g" $apache2_build_dir/conf/httpd.conf
-
-#echo "changed apache http conf listen port from 80 to 9080"
-
+# -------------------------------not require here to start apache (testing purpose)-----------------------------------------------------------------
 #start the apache
 #$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
-#echo "Apache has been started...."
 #echo "Apache has been started.... "$(netstat -a)
-#echo "VCAP_PORT:"$(VCAP_APP_PORT)
 
 # ------------------------------------------------------------------------------------------------
 
