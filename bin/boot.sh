@@ -45,6 +45,9 @@ echo "lib:$(ls -l /usr/local/lib/)"
 #ldd $APP_ROOT/apache2/bin/httpd
 #cat $APP_ROOT/nginx/conf/nginx.conf
 cat $APP_ROOT/apache2/conf/httpd.conf
+
+ldconfig
+
 (tail -f -n 0 $APP_ROOT/nginx/logs/*.log &)
 #exec $APP_ROOT/nginx/sbin/nginx -p $APP_ROOT/nginx -c $APP_ROOT/nginx/conf/nginx.conf
 exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
