@@ -20,6 +20,12 @@ then
   conf_file=$APP_ROOT/public/nginx.conf
 fi
 
+apache_conf_file=$APP_ROOT/apache2/conf/httpd.conf
+if [ -f $APP_ROOT/public/httpd.conf ]
+then
+  apache_conf_file=$APP_ROOT/public/httpd.conf
+fi
+
 mv $conf_file $APP_ROOT/nginx/conf/orig.conf
 erb $APP_ROOT/nginx/conf/orig.conf > $APP_ROOT/nginx/conf/nginx.conf
 
