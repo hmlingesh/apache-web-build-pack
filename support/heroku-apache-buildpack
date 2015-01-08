@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+
+
+
+buildpack_root=$PWD
+
+# ------------------------------------------------------------------------------------------------
+
+buildpack_pcre_version=8.32
+buildpack_pcre_url=ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+buildpack_pcre_download=$buildpack_pcre_url/pcre-$buildpack_pcre_version.tar.gz
+
+# ------------------------------------------------------------------------------------------------
+
+#http://www.webhostingjams.com/mirror/apache//httpd/httpd-$apache_version.tar.gz
+buildpack_apache2_url=http://www.webhostingjams.com/mirror/apache//httpd/
+buildpack_apache2_version=2.2.29
+buildpack_apache2_build_flags=(
+--prefix=/app/apache2 \
+--enable-mods-shared=all \
+--enable-http \
+--enable-deflate \
+--enable-expires \
+--enable-slotmem-shm \
+--enable-headers \
+--enable-rewrite \
+--enable-proxy \
+--enable-proxy-balancer \
+--enable-proxy-http \
+--enable-proxy-fcgi \
+--enable-mime-magic \
+--enable-log-debug \
+--with-mpm=event
+#--with-pcre=./pcre-$buildpack_pcre_version
+)
+buildpack_apache2_download=$buildpack_apache2_url/httpd-$buildpack_apache2_version.tar.gz
+# ------------------------------------------------------------------------------------------------
+# The build line that goes into -c of vulcan build
+# ------------------------------------------------------------------------------------------------
+
+buildpack_build_line=(
+  "rm -rf /app/apache2 && mkdir /app/apache2 &&"
+  "./configure ${buildpack_apache2_build_flags[*]} && make install"
+)
+
+# ------------------------------------------------------------------------------------------------
+
+function buildpack_exit()
+{
+  echo $1
+  exit $2 || 1
+}
+
+# ------------------------------------------------------------------------------------------------
+# $~: heroku-buildpack download
+# ------------------------------------------------------------------------------------------------
+
+function buildpack_download()
+{
+  apache2=$(basename ${buildpack_apache2_download%.tar.gz})
+  mkdir -p $buildpack_root/sources
+  cd $buildpack_root/sources
+
+  if curl -s $buildpack_apache2_download |tar xzv
+  then
+    # Puts PCRE into the NGINX folder so it uploads yo.
+    curl -s $buildpack_pcre_download |tar xzv -C $apache2
+  fi
+
+}
+
+
+
+
+# ------------------------------------------------------------------------------------------------
+# $~: heroku-buildpack build
+# ------------------------------------------------------------------------------------------------
+
+function buildpack_build()
+{
+  apache2=$(basename ${buildpack_apache2_download%.tar.gz})
+vulcan build -v \
+    -s $buildpack_root/sources/$apache2 \
+    -p /app/apache2 \
+    -c "${buildpack_build_line[*]}" || buildpack_exit "No"
+  mkdir -p $buildpack_root/builds
+  mv /tmp/${apache2%.*}.tgz $buildpack_root/builds/$apache2.tar.gz
+  echo "You should probably run 'support/heroku-buildpack setup' to clean the build."
+
+}
+# ------------------------------------------------------------------------------------------------
+# $~: heroku-buildpack setup
+# ------------------------------------------------------------------------------------------------
+
+function buildpack_setup()
+{
+  apache2=$(basename ${buildpack_apache2_download%.tar.gz})
+  mkdir -p $buildpack_root/builds
+  cd $buildpack_root/builds
+
+  [[ -f $apache2.tar.gz ]] || buildpack_exit "No" && mkdir -p $apache2
+
+  tar xmzvf $apache2.tar.gz -C $apache2
+  chmod -R uog+rx $apache2/bin
+  rm -rf $apache2/conf
+  rm -rf $apache2/logs
+  cp -R $buildpack_root/conf $apache2
+  cp -R $buildpack_root/logs $apache2
+  tar czvf $apache2.tar.gz $apache2 --transform s/^$apache2/nginx/ --owner=0 --group=0 && rm -rf $apache2
+
+  }
+
+
+# ------------------------------------------------------------------------------------------------
+# $~: heroku-buildpack cleanup
+# ------------------------------------------------------------------------------------------------
+
+function buildpack_cleanup()
+{
+  rm -rf $buildpack_root/builds && rm -rf $buildpack_root/sources
+  mkdir  $buildpack_root/builds && mkdir  $buildpack_root/sources
+}
+
+# ------------------------------------------------------------------------------------------------
+
+case "$1" in
+  cleanup) buildpack_cleanup;;
+  setup) buildpack_setup;;
+  build) buildpack_build;;
+  download) buildpack_download;;
+  run) buildpack_cleanup && buildpack_download && buildpack_build && buildpack_setup;;
+esac
+
+# ------------------------------------------------------------------------------------------------
