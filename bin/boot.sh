@@ -39,10 +39,10 @@ echo "----> list of files and directory:$(ls -l)"
 
 for i in $(ls -d  $HOME/*/); do echo ${i%%/}; done
 
-export PATH=$PATH:$APP_ROOT/apache2/lib
-
+#export PATH=$PATH:$APP_ROOT/apache2/lib
 echo "lib:$(ls -l /usr/local/lib/)"
 
+ldd $APP_ROOT/apache2/bin/httpd
 #cat $APP_ROOT/nginx/conf/nginx.conf
 #cat $APP_ROOT/apache2/conf/httpd.conf
 (tail -f -n 0 $APP_ROOT/nginx/logs/*.log &)
