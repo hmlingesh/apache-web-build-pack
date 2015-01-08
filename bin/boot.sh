@@ -20,9 +20,9 @@ for i in $(ls -d  $HOME/*/); do echo ${i%%/}; done
 #ldd $APP_ROOT/apache2/bin/httpd
 cat $APP_ROOT/apache2/conf/httpd.conf
 
-ldconfig
+#ldconfig
 
 (tail -f -n 0 $APP_ROOT/apache2/logs/*.log &)
-exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
+#exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
 #exec $APP_ROOT/apache2/bin/apachectl start
 # ------------------------------------------------------------------------------------------------
