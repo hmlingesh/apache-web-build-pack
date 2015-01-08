@@ -50,7 +50,7 @@ rm -f public/{manifest,stackato}.yml
 # ------------------------------------------------------------------------------------------------
 
 cp $compile_buildpack_bin/boot.sh .
-<<'COMMENT' 
+ 
 #ls -lah
 if [ ! -d "$HOME/apache2" ]; then
 
@@ -94,16 +94,16 @@ echo "Copied index.html into htdocs..."
 
 # edit the http config to listen > 1024 port since we are not an root user
 #sed -i "s/Listen 80/ Listen <%= ENV[\"PORT\"] %>/g" $apache2_build_dir/conf/httpd.conf
-sed -i "s/Listen 80/ Listen 61451/g" $apache2_build_dir/conf/httpd.conf
+#sed -i "s/Listen 80/ Listen 61451/g" $apache2_build_dir/conf/httpd.conf
 
 #echo "changed apache http conf listen port from 80 to 9080"
 
 #start the apache
-$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
-echo "Apache has been started...."
-echo "Apache has been started.... "$(netstat -a | grep 61451)
+#$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
+#echo "Apache has been started...."
+#echo "Apache has been started.... "$(netstat -a | grep 61451)
 #echo "VCAP_PORT:"$(VCAP_APP_PORT)
-COMMENT
+
 export APP_ROOT=$HOME
 
 echo "APP_ROOT:"$(APP_ROOT)
