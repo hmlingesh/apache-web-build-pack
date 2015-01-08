@@ -40,7 +40,7 @@ buildpack_apache2_download=$buildpack_apache2_url/httpd-$buildpack_apache2_versi
 
 buildpack_build_line=(
   "rm -rf /app/apache2 && mkdir /app/apache2 &&"
-  "./configure ${buildpack_apache2_build_flags[*]} && make install"
+  "./configure ${buildpack_apache2_build_flags[*]} && make && make install"
 )
 
 # ------------------------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ function buildpack_setup()
   rm -rf $apache2/logs
   cp -R $buildpack_root/conf $apache2
   cp -R $buildpack_root/logs $apache2
-  tar czvf $apache2.tar.gz $apache2 --transform s/^$apache2/nginx/ --owner=0 --group=0 && rm -rf $apache2
+  tar czvf $apache2.tar.gz $apache2 --transform s/^$apache2/apache2/ --owner=0 --group=0 && rm -rf $apache2
 
   }
 
