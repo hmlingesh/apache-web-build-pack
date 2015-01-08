@@ -33,6 +33,9 @@ mv $apache_conf_file $APP_ROOT/apache2/conf/orig.conf
 erb $APP_ROOT/apache2/conf/orig.conf > $APP_ROOT/apache2/conf/httpd.conf
 
 # ------------------------------------------------------------------------------------------------
+echo "----> list of files and directory:$(ls -l)" 
+
+echo "----> list of files and directory:$(ls -d $HOME)" 
 cat $APP_ROOT/nginx/conf/nginx.conf
 cat $APP_ROOT/apache2/conf/httpd.conf
 (tail -f -n 0 $APP_ROOT/nginx/logs/*.log &)
