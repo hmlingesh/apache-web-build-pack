@@ -100,14 +100,14 @@ sed -i "s/Listen 80/ Listen 61451/g" $apache2_build_dir/conf/httpd.conf
 #echo "changed apache http conf listen port from 80 to 9080"
 
 #start the apache
-$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
+#$apache2_build_dir/bin/httpd -k start -f $apache2_build_dir/conf/httpd.conf
 echo "Apache has been started...."
 echo "Apache has been started.... "$(netstat -a | grep 61451)
 #echo "VCAP_PORT:"$(VCAP_APP_PORT)
 
 export APP_ROOT=$HOME
 
-echo "APP_ROOT:"$APP_ROOT
+echo "APP_ROOT:"$(APP_ROOT)
 cd $(APP_ROOT)
 echo "----> list of files and directory:$(ls -l)"
 # ------------------------------------------------------------------------------------------------
