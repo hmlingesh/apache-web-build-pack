@@ -56,7 +56,7 @@ if [ ! -d "$HOME/apache2" ]; then
 
 cd $compile_build_dir/httpd-2.2.29
 
-apache2_build_dir=$compile_build_dir/apache2
+apache2_build_dir=$HOME/apache2
 #configure
 ./configure --prefix=$apache2_build_dir \
 --enable-mods-shared=all \
