@@ -11,7 +11,6 @@ compile_cache_dir=$2
 compile_buildpack_dir=$(cd $(dirname $0) && cd .. && pwd)
 compile_buildpack_bin=$compile_buildpack_dir/bin
 
-echo "Apache running.... "$(netstat -a | grep 8080)
 echo "pwd: $(pwd)"
 echo "compile_build_dir: $compile_build_dir"
 echo "compile_cache_dir: $compile_cache_dir"
@@ -41,10 +40,11 @@ echo "----> list of files and directory:$(ls -l)"
 cp -f $compile_buildpack_dir/conf/nginx.conf nginx/conf/nginx.conf
 cp -f $compile_buildpack_dir/conf/mime.types nginx/conf/mime.types
 
-
-
 [[ -f public/nginx.conf ]] && mv public/nginx.conf nginx/conf/nginx.conf
 [[ -f public/mime.types ]] && mv public/mime.types nginx/conf/mime.types
+
+cp -f $compile_buildpack_dir/conf/httpd.conf apache2/conf/httpd.conf
+[[ -f public/httpd.conf ]] && mv public/httpd.conf apache2/conf/httpd.conf
 
 echo "-----> Ensuring manifest.yml & stackato.yml aren't available in public/"
 rm -f public/{manifest,stackato}.yml
@@ -77,11 +77,11 @@ apache2_build_dir=$compile_build_dir/apache2
 echo "config completed to:"$apache2_build_dir
 
 #compile the source
-make
+#make
 echo "apache has been compiled successfully..."
 
 #install
-make install
+#make install
 echo "apache has been installed successfully..."
 
 fi
