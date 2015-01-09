@@ -45,6 +45,7 @@ cd apr-1.5.1
 make
 make install
 chmod -R uog+rx $apr_build_dir
+export LD_LIBRARY_PATH="/tmp/staged/app/apr/lib"
 # -----------------------------------apr install end --------------------
 
 cd ..
