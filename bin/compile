@@ -37,8 +37,17 @@ mv * $compile_cache_dir/public
 mv $compile_cache_dir/public .
 [[ -f public/Procfile ]] && mv public/Procfile .
 
+# -----------------------------------apr install--------------------
 tar xzf $compile_apr_tgz
+cd apr-1.5.1/
+./configure
+make
+make install
+# -----------------------------------apr install end --------------------
+cd ..
+
 tar xzf $compile_apr_util_tgz
+
 tar xzf $compile_httpd_tgz
 
 # -----------------------------------httpd configure,compile and install-------------------------------------------------------------
