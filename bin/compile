@@ -24,6 +24,8 @@ echo "compile_buildpack_dir: $compile_buildpack_dir"
 
 # ----------------------httpd download kept along with buildpack--------------------------------------------------------------------------
 compile_httpd_tgz="$compile_buildpack_dir/vendor/httpd-2.2.29.tar.gz"
+compile_apr_tgz="$compile_buildpack_dir/vendor/apr-1.5.1.tar.gz"
+compile_apr_util_tgz="$compile_buildpack_dir/vendor/apr-util-1.5.4.tar.gz"
 # ------------------------------------------------------------------------------------------------
 
 cd $compile_build_dir
@@ -34,6 +36,9 @@ mkdir -p $compile_cache_dir/public
 mv * $compile_cache_dir/public
 mv $compile_cache_dir/public .
 [[ -f public/Procfile ]] && mv public/Procfile .
+
+tar xzf $compile_apr_tgz
+tar xzf $compile_apr_util_tgz
 tar xzf $compile_httpd_tgz
 
 # -----------------------------------httpd configure,compile and install-------------------------------------------------------------
