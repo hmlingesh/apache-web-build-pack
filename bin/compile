@@ -44,6 +44,7 @@ cd apr-1.5.1
 ./configure --prefix=$apr_build_dir
 make
 make install
+chmod -R uog+rx $apr_build_dir
 # -----------------------------------apr install end --------------------
 
 cd ..
@@ -55,6 +56,7 @@ apr_util_build_dir=$compile_build_dir/apr_util
 ./configure  --prefix=$apr_util_build_dir\ --with-apr=$apr_build_dir
 make
 make install
+chmod -R uog+rx $apr_util_build_dir
 # -----------------------------------apr-util install end --------------------
 
 cd ..
