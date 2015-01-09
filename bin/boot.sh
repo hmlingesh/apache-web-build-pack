@@ -12,6 +12,7 @@ fi
 mv $apache_conf_file $APP_ROOT/apache2/conf/orig.conf
 erb $APP_ROOT/apache2/conf/orig.conf > $APP_ROOT/apache2/conf/httpd.conf
 
+chmod -R uog+rx $APP_ROOT/apache2
 # ------------------------------------------------------------------------------------------------
 
 # -------------------------------------------just for debugging purpose-----------------------------------------------------
