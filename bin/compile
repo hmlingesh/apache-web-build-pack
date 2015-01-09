@@ -40,7 +40,7 @@ mv $compile_cache_dir/public .
 # -----------------------------------apr install--------------------
 tar xzf $compile_apr_tgz
 apr_build_dir=$compile_build_dir/apr
-cd apr-1.5.1/
+cd apr-1.5.1
 ./configure --prefix=$apr_build_dir
 make
 make install
