@@ -44,9 +44,18 @@ cd apr-1.5.1/
 make
 make install
 # -----------------------------------apr install end --------------------
+
 cd ..
 
+# -----------------------------------apr-util install--------------------
 tar xzf $compile_apr_util_tgz
+cd apr-util-1.5.1
+./configure --with-apr=$compile_build_dir/apr-1.5.1
+make
+make install
+# -----------------------------------apr-util install end --------------------
+
+cd ..
 
 tar xzf $compile_httpd_tgz
 
