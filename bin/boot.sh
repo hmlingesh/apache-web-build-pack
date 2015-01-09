@@ -31,5 +31,5 @@ ldd $APP_ROOT/apache2/bin/httpd | grep libapr
 exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
 #exec $APP_ROOT/apache2/bin/apachectl start
 
-netstat -a
+echo "Apache has been started.... $(netstat -a)"
 # ------------------------------------------------------------------------------------------------
