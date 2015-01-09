@@ -50,7 +50,7 @@ cd ..
 
 # -----------------------------------apr-util install--------------------
 tar xzf $compile_apr_util_tgz
-cd apr-util-1.5.1
+cd apr-util-1.5.4
 apr_util_build_dir=$compile_build_dir/apr_util
 ./configure  --prefix=$apr_util_build_dir\ --with-apr=$apr_build_dir
 make
