@@ -85,9 +85,9 @@ apache2_build_dir=$compile_build_dir/apache2
 --enable-proxy-fcgi \
 --enable-mime-magic \
 --enable-log-debug \
---with-mpm=event 
+--with-mpm=event \ 
+--with-included-apr 
 #--with-apr=$apr_build_dir
-#--with-included-apr 
 echo "config completed to:"$apache2_build_dir
 
 #compile the source
