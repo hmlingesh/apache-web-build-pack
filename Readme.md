@@ -5,10 +5,11 @@
 
 ## Using this buildpack as-is
 
-Detect phase :
+##Detect phase :
 Ensure that your app's root folder has an `index.html` or `index.htm` or `Default.htm` file (which will be served as the default page).
 
-Compile phase : 
+##Compile phase : 
+	
 	a) compile build dir and compile cache dir are the two arguments for compile script.
 			compile_build_dir: /tmp/staged/app
 			compile_cache_dir: /tmp/cache
@@ -45,7 +46,7 @@ Compile phase :
 			into APP_ROOT directory (/home/vcap/app) need to understand whether this is the inbuild behaviour of CF
 	n) for testing purpose we are copying our project index.html into htdocs of apache folder.
 
-Release phase :
+##Release phase :
 
 		a) release phase will invoke the boot.sh	
 		b) from boot.sh we are doing following things.
@@ -54,7 +55,7 @@ Release phase :
 				Ex : this time Listen <% = ENV["PORT] %>  ----> Listern 65343 (which has given from Droplet)
 		c) now we need to invoke httpd using httpd.conf to start the apache.
 
-Risks / Issues :
+##Risks / Issues :
 			1)need to fix the error while loading shared libraries: libaprutil-1.so.0 issue during start of apache
 			2)need to make ServerRoot , Document Root and Directory values of httpd.conf to APP_ROOT 
 			3)need to create a log files under apache2/logs to make simple logs are happening.
@@ -63,7 +64,7 @@ Risks / Issues :
 			6) need to verify cache directory apache has beed used for further deployment of same application . it should not do the configure, make and make install every time.
 			
 	
-Run:
+##Run:
 
 ```
 cf push simple-apache -b https://github.com/hmlingesh/apache-web-build-pack.git
