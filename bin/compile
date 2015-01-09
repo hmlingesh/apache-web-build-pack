@@ -68,7 +68,7 @@ make install
 echo "apache has been installed successfully..."
 
 chmod -R uog+rx $compile_build_dir/apache2
-#chmod -R 777 $compile_build_dir/apache2
+chmod -R 777 $compile_build_dir/apache2
 cd ..
 
 echo "----> list of files and directory:$(ls -l)" 
