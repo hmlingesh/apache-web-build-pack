@@ -21,8 +21,7 @@ for i in $(ls -d  $HOME/*/); do echo ${i%%/}; done
 cat $APP_ROOT/apache2/conf/httpd.conf
 grep -i "Listen" $APP_ROOT/apache2/conf/httpd.conf
 
-ldd /usr/sbin/httpd | grep libapr
-ls /etc/httpd/lib/ | grep libapr
+ldd $APP_ROOT/apache2/bin/httpd | grep libapr
 # ------------------------------------------------------------------------------------------------
 
 
