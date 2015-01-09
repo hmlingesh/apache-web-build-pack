@@ -39,8 +39,9 @@ mv $compile_cache_dir/public .
 
 # -----------------------------------apr install--------------------
 tar xzf $compile_apr_tgz
+apr_build_dir=$compile_build_dir/apr
 cd apr-1.5.1/
-./configure
+./configure --prefix=$apr_build_dir
 make
 make install
 # -----------------------------------apr install end --------------------
@@ -50,7 +51,8 @@ cd ..
 # -----------------------------------apr-util install--------------------
 tar xzf $compile_apr_util_tgz
 cd apr-util-1.5.1
-./configure --with-apr=$compile_build_dir/apr-1.5.1
+apr_util_build_dir=$compile_build_dir/apr_util
+./configure  --prefix=$apr_util_build_dir\ --with-apr=$compile_build_dir/apr
 make
 make install
 # -----------------------------------apr-util install end --------------------
