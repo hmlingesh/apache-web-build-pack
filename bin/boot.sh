@@ -36,4 +36,11 @@ $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
 #exec $APP_ROOT/apache2/bin/apachectl start
 
 echo "Apache has been started.... $(netstat -a)"
+
+sleep 1m
+
+echo "After waiting"
+echo "Apache has been started.... $(netstat -a)"
+
+cat $APP_ROOT/apache2/logs/error.log
 # ------------------------------------------------------------------------------------------------
