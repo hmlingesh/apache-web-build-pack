@@ -22,6 +22,7 @@ echo "----> list of files and directory:$(ls -l)"
 for i in $(ls -d  $HOME/*/); do echo ${i%%/}; done
 cat $APP_ROOT/apache2/conf/httpd.conf
 grep -i "Listen" $APP_ROOT/apache2/conf/httpd.conf
+grep -i "ServerName" $APP_ROOT/apache2/conf/httpd.conf
 
 #ldd $APP_ROOT/apache2/bin/httpd | grep libapr
 # ------------------------------------------------------------------------------------------------
