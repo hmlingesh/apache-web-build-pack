@@ -99,6 +99,7 @@ echo "apache has been installed successfully..."
 
 chmod -R uog+rx $compile_build_dir/apache2
 
+cd ..
 
 #copying config file from buildpack to apache2 directory also to public directory
 cp -f $compile_buildpack_dir/conf/httpd.conf apache2/conf/httpd.conf
