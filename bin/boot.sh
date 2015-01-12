@@ -28,10 +28,11 @@ grep -i "ServerName" $APP_ROOT/apache2/conf/httpd.conf
 # ------------------------------------------------------------------------------------------------
 echo "Before Apache start.... $(netstat -a)"
 
-echo "version httpd: $($(APP_ROOT)/apache2/bin/httpd -v)"
+$APP_ROOT/apache2/bin/httpd -v
 
 (tail -f -n 0 $APP_ROOT/apache2/logs/*.log &)
 exec  $APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
+$APP_ROOT/apache2/bin/httpd -k start -f $APP_ROOT/apache2/conf/httpd.conf
 #exec $APP_ROOT/apache2/bin/apachectl start
 
 echo "Apache has been started.... $(netstat -a)"
