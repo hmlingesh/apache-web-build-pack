@@ -2,4 +2,4 @@
 # bin/release <build-dir>
 
 echo -e "---\ndefault_process_types:\n  web: sh boot.sh"
-echo "Apache has been started.... $(netstat -a)"
+#echo "Apache has been started.... $(netstat -a)"
